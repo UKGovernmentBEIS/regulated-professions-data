@@ -16,14 +16,19 @@ class Processor
     @organisations.map { |organisation|
       {
         name: organisation["Organisation Name"],
-        alternateName: organisation["Alternate Name"],
         slug: slugify(organisation["Organisation Name"]),
-        address: [organisation["Address"], organisation["City"], organisation["Postcode"]].join(","),
-        url: organisation["Website"],
-        email: organisation["Email"],
-        contactUrl: "",
-        telephone: organisation["Phone Number"],
-        fax: ""
+        versions: [
+          {
+            alternateName: organisation["Alternate Name"],
+            address: [organisation["Address"], organisation["City"], organisation["Postcode"]].join(","),
+            url: organisation["Website"],
+            email: organisation["Email"],
+            contactUrl: "",
+            telephone: organisation["Phone Number"],
+            fax: "",
+            status: "live"
+          }
+        ]
       }
     }
   end
