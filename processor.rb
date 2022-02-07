@@ -71,7 +71,7 @@ class Processor
   def parsed_legislation
     @legislation.map { |legislation|
       {
-        name: legislation["Legislation"],
+        name: legislation["Legislation Name"],
         url: legislation["Legislation Link"]
       }
     }
