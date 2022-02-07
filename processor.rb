@@ -4,12 +4,12 @@ require "json"
 
 class Processor
   def initialize
-    @professions = CSV.open("./data/professions.csv", headers: true).to_a
-    @organisations = CSV.open("./data/organisations.csv", headers: true).to_a
-    @legislation = CSV.open("./data/legislation.csv", headers: true).to_a
+    @professions = CSV.open("./data/professions.csv", encoding: "bom|utf-8", headers: true).to_a
+    @organisations = CSV.open("./data/organisations.csv", encoding: "bom|utf-8", headers: true).to_a
+    @legislation = CSV.open("./data/legislation.csv", encoding: "bom|utf-8", headers: true).to_a
 
     @legislation_to_professions = CSV.open("./data/legislation-to-professions.csv", encoding: "bom|utf-8", headers: true).to_a
-    @professions_to_orgs = CSV.open("./data/professions-to-orgs.csv", headers: true).to_a
+    @professions_to_orgs = CSV.open("./data/professions-to-orgs.csv", encoding: "bom|utf-8", headers: true).to_a
   end
 
   def parsed_organisations
