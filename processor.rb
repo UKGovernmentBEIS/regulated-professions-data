@@ -39,17 +39,23 @@ class Processor
     @professions.each do |profession|
       profession = {
         name: profession["Name"],
-        alternateName: profession["Other Title(s)"],
-        description: profession["Description"],
-        occupationLocations: parse_locations(profession["Jurisdiction"]),
-        regulationType: profession["Regulation Type"],
-        industries: [fetch_industry(profession["BEIS defined sector"])],
-        qualification: "",
-        reservedActivities: profession["Reserved Activities"],
-        legislation: fetch_legislation(profession["ProfID"]).first,
         organisation: fetch_organisations(profession["ProfID"]).first,
-        mandatoryRegistration: "voluntary",
-        confirmed: true
+        versions: [
+          {
+            alternateName: profession["Other Title(s)"],
+            description: profession["Description"],
+            occupationLocations: parse_locations(profession["Jurisdiction"]),
+            regulationType: profession["Regulation Type"],
+            industries: [fetch_industry(profession["BEIS defined sector"])],
+            qualification: "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
+            protectedTitles: profession["Other Protected Title(s)"],
+            regulationUrl: "",
+            reservedActivities: profession["Reserved Activities"],
+            legislations: fetch_legislation(profession["ProfID"]),
+            mandatoryRegistration: "voluntary",
+            status: "live"
+          }
+        ]
       }
 
       tries = 0
@@ -71,6 +77,22 @@ class Processor
     end
 
     professions
+  end
+
+  def parsed_qualifications
+    [{
+      level: "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
+      methodToObtain: "generalSecondaryEducation",
+      otherMethodToObtain: "",
+      commonPathToObtain: "generalSecondaryEducation",
+      otherCommonPathToObtain: "",
+      educationDuration: " 5.0 Year",
+      educationDurationYears: 5,
+      educationDurationMonths: 0,
+      educationDurationDays: 0,
+      educationDurationHours: 0,
+      mandatoryProfessionalExperience: true
+    }]
   end
 
   def parsed_legislation
@@ -134,7 +156,8 @@ class Processor
   end
 
   def fetch_legislation(id)
-    @legislation_to_professions.select { |legislation| legislation["ProfID"] == id }.map { |l| l["Legislation (FOR QA - TO DELETE)"] }.compact
+    ids = @legislation_to_professions.select { |legislation| legislation["ProfID"] == id }.map { |l| l["LegID"] }.compact
+    @legislation.select { | legislation| ids.include?(legislation["LegislationID"]) }.map { |l| l["Legislation Name"]}
   end
 end
 
@@ -143,3 +166,4 @@ processor = Processor.new
 File.write("out/professions.json", JSON.pretty_generate(processor.parsed_professions))
 File.write("out/organisations.json", JSON.pretty_generate(processor.parsed_organisations))
 File.write("out/legislation.json", JSON.pretty_generate(processor.parsed_legislation))
+File.write("out/qualifications.json", JSON.pretty_generate(processor.parsed_qualifications))
