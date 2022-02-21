@@ -10,6 +10,7 @@ class Processor
 
     @legislation_to_professions = CSV.open("./data/legislation-to-professions.csv", encoding: "bom|utf-8", headers: true).to_a
     @professions_to_orgs = CSV.open("./data/professions-to-orgs.csv", encoding: "bom|utf-8", headers: true).to_a
+    @soc_codes = CSV.open("./data/soccodes.csv", encoding: "bom|utf-8", headers: true).to_a
   end
 
   def parsed_organisations
@@ -53,7 +54,9 @@ class Processor
             reservedActivities: profession["Reserved Activities"],
             legislations: fetch_legislation(profession["ProfID"]),
             mandatoryRegistration: "voluntary",
-            status: "live"
+            status: "live",
+            socCode: profession["SOC"].to_i,
+            keywords: keywords_from_soccode(profession["SOC"])
           }
         ]
       }
@@ -157,7 +160,11 @@ class Processor
 
   def fetch_legislation(id)
     ids = @legislation_to_professions.select { |legislation| legislation["ProfID"] == id }.map { |l| l["LegID"] }.compact
-    @legislation.select { | legislation| ids.include?(legislation["LegislationID"]) }.map { |l| l["Legislation Name"]}
+    @legislation.select { |legislation| ids.include?(legislation["LegislationID"]) }.map { |l| l["Legislation Name"] }
+  end
+
+  def keywords_from_soccode(code)
+    @soc_codes.select { |r| r["SOCID"] == code }.map { |r| r["IndexTerm"] }.join(",")
   end
 end
 
