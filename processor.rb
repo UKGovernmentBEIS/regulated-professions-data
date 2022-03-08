@@ -179,5 +179,5 @@ processor = Processor.new
 
 File.write("out/professions.json", JSON.pretty_generate(processor.parsed_professions))
 File.write("out/organisations.json", JSON.pretty_generate(processor.parsed_organisations))
-File.write("out/legislation.json", JSON.pretty_generate(processor.parsed_legislation))
+File.write("out/legislations.json", JSON.pretty_generate(processor.parsed_legislation))
 File.write("out/qualifications.json", JSON.pretty_generate(processor.parsed_qualifications))
