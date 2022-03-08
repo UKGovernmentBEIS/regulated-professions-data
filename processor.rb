@@ -47,7 +47,7 @@ class Processor
             alternateName: profession["Other Title(s)"],
             description: profession["Description"],
             occupationLocations: parse_locations(profession["Jurisdiction"]),
-            regulationType: profession["Regulation Type"],
+            regulationType: convert_regulation_type(profession["Regulation Type"]),
             industries: [fetch_industry(profession["BEIS defined sector"])],
             qualification: "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
             protectedTitles: profession["Other Protected Title(s)"],
@@ -166,6 +166,12 @@ class Processor
 
   def keywords_from_soccode(code)
     @soc_codes.select { |r| r["SOCID"] == code }.map { |r| r["IndexTerm"] }.join(",")
+  end
+
+  def convert_regulation_type(field)
+    return nil if field.to_s.strip.empty?
+
+    field.split(" - ")[0].downcase
   end
 end
 
