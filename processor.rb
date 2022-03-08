@@ -40,7 +40,8 @@ class Processor
     @professions.each do |profession|
       profession = {
         name: profession["Name"],
-        organisation: fetch_organisations(profession["ProfID"]).first,
+        organisation: fetch_organisations(profession["ProfID"])[0],
+        additionalOrganisation: fetch_organisations(profession["ProfID"])[1],
         versions: [
           {
             alternateName: profession["Other Title(s)"],
