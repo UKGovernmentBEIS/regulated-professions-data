@@ -40,13 +40,14 @@ class Processor
     @professions.each do |profession|
       profession = {
         name: profession["Name"],
-        organisation: fetch_organisations(profession["ProfID"]).first,
+        organisation: fetch_organisations(profession["ProfID"])[0],
+        additionalOrganisation: fetch_organisations(profession["ProfID"])[1],
         versions: [
           {
             alternateName: profession["Other Title(s)"],
             description: profession["Description"],
             occupationLocations: parse_locations(profession["Jurisdiction"]),
-            regulationType: profession["Regulation Type"],
+            regulationType: convert_regulation_type(profession["Regulation Type"]),
             industries: [fetch_industry(profession["BEIS defined sector"])],
             qualification: "DSE - Diploma (post-secondary education), including Annex II (ex 92/51, Annex C,D) , Art. 11 c",
             protectedTitles: profession["Other Protected Title(s)"],
@@ -166,11 +167,17 @@ class Processor
   def keywords_from_soccode(code)
     @soc_codes.select { |r| r["SOCID"] == code }.map { |r| r["IndexTerm"] }.join(",")
   end
+
+  def convert_regulation_type(field)
+    return nil if field.to_s.strip.empty?
+
+    field.split(" - ")[0].downcase
+  end
 end
 
 processor = Processor.new
 
 File.write("out/professions.json", JSON.pretty_generate(processor.parsed_professions))
 File.write("out/organisations.json", JSON.pretty_generate(processor.parsed_organisations))
-File.write("out/legislation.json", JSON.pretty_generate(processor.parsed_legislation))
+File.write("out/legislations.json", JSON.pretty_generate(processor.parsed_legislation))
 File.write("out/qualifications.json", JSON.pretty_generate(processor.parsed_qualifications))
