@@ -55,7 +55,7 @@ class Processor
             reservedActivities: profession["Reserved Activities"],
             legislations: fetch_legislation(profession["ProfID"]),
             mandatoryRegistration: "voluntary",
-            status: "live",
+            status: "draft",
             socCode: profession["SOC"].to_i,
             keywords: keywords_from_soccode(profession["SOC"])
           }
