@@ -27,7 +27,7 @@ class Processor
             contactUrl: "",
             telephone: organisation["Phone Number"],
             fax: "",
-            status: "live"
+            status: "draft"
           }
         ]
       }
