@@ -21,7 +21,7 @@ class Processor
         versions: [
           {
             alternateName: organisation["Alternate Name"],
-            address: [organisation["Address"], organisation["City"], organisation["Postcode"]].join(","),
+            address: [organisation["Address"], organisation["City"], organisation["Postcode"]].reject { |line| line.to_s.strip.empty? }.join("\r\n"),
             url: organisation["Website"],
             email: organisation["Email"],
             contactUrl: "",
