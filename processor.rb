@@ -150,7 +150,7 @@ class Processor
       "Legal" => "industries.law",
       "Architecture" => "industries.architecture",
       "Finance and Insurance" => "industries.finance",
-      "Social Services" => "industries.socialServices",
+      "Social Services" => "industries.health",
       "Transport" => "industries.transport",
       "Other" => "industries.other",
       "Construction and Engineering" => "industries.constructionAndEngineering",
